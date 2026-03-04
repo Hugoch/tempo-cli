@@ -14,12 +14,16 @@ pub struct SearchResponse {
 pub struct TraceSearchResult {
     #[serde(rename = "traceID")]
     pub trace_id: String,
+    #[serde(default)]
     pub root_service_name: String,
+    #[serde(default)]
     pub root_trace_name: String,
     #[serde(rename = "startTimeUnixNano")]
     pub start_time_unix_nano: String,
-    #[serde(rename = "durationMs")]
-    pub duration_ms: u64,
+    #[serde(rename = "durationMs", default)]
+    pub duration_ms: Option<u64>,
+    #[serde(rename = "durationNanos", default)]
+    pub duration_nanos: Option<String>,
 }
 
 #[derive(Deserialize, Serialize, Debug)]

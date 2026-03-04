@@ -151,12 +151,24 @@ pub fn format_search_results(data: &SearchResponse, human_readable: bool) {
             .map(|dt| dt.format("%Y-%m-%d %H:%M:%S").to_string())
             .unwrap_or_default();
 
+        let duration = trace
+            .duration_ms
+            .map(format_duration_ms)
+            .or_else(|| {
+                trace
+                    .duration_nanos
+                    .as_ref()
+                    .and_then(|s| s.parse::<u64>().ok())
+                    .map(|ns| format_duration_ms(ns / 1_000_000))
+            })
+            .unwrap_or("?".to_string());
+
         println!(
             "{} {} {} {} {}",
             trace.trace_id.green().bold(),
             trace.root_service_name.cyan(),
             trace.root_trace_name.yellow(),
-            format_duration_ms(trace.duration_ms).bright_white(),
+            duration.bright_white(),
             ts.dimmed()
         );
     }
