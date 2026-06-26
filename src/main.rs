@@ -25,6 +25,13 @@ enum Commands {
     Get {
         /// Trace ID
         trace_id: String,
+        /// Start time (e.g., "1h", "now", RFC3339, Unix timestamp). Narrows the block
+        /// search window; required for large traces to avoid scanning all blocks.
+        #[arg(long)]
+        start: Option<String>,
+        /// End time
+        #[arg(long)]
+        end: Option<String>,
     },
     /// Search traces with TraceQL
     Search {
@@ -67,8 +74,8 @@ fn main() -> Result<()> {
     let client = TempoClient::new()?;
 
     match cli.command {
-        Commands::Get { trace_id } => {
-            commands::get::run(&client, &trace_id, cli.human)?;
+        Commands::Get { trace_id, start, end } => {
+            commands::get::run(&client, &trace_id, start.as_deref(), end.as_deref(), cli.human)?;
         },
         Commands::Search {
             traceql,

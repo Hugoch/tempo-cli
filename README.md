@@ -21,6 +21,8 @@ cargo install --path .
 ```bash
 # Get a trace by ID
 tempo-cli get <traceID>
+# Narrow the block-search window for large traces (avoids scanning all blocks)
+tempo-cli get <traceID> --start 12h --end 9h
 
 # Search traces with TraceQL
 tempo-cli search '{ resource.service.name = "my-service" }'
