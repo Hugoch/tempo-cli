@@ -21,7 +21,8 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Get a trace by ID
+    /// Get a trace by ID (alias: trace)
+    #[command(visible_alias = "trace")]
     Get {
         /// Trace ID
         trace_id: String,
