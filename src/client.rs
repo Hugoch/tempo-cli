@@ -80,9 +80,16 @@ impl TempoClient {
         req
     }
 
-    pub fn get_trace(&self, trace_id: &str) -> Result<serde_json::Value> {
-        let resp = self
-            .request(&format!("/api/traces/{}", trace_id))
+    pub fn get_trace(&self, trace_id: &str, start: Option<&str>, end: Option<&str>) -> Result<serde_json::Value> {
+        let mut req = self.request(&format!("/api/traces/{}", trace_id));
+        if let Some(s) = start {
+            req = req.query(&[("start", s)]);
+        }
+        if let Some(e) = end {
+            req = req.query(&[("end", e)]);
+        }
+
+        let resp = req
             .send()
             .context("Failed to send request")?
             .error_for_status()
